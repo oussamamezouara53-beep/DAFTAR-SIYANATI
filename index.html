@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#17324d">
+<title>دفتر صيانة السيارات</title>
+<style>
+:root{--navy:#17324d;--blue:#2878a5;--bg:#f3f6f9;--card:#fff;--text:#17212b;--muted:#64748b;--line:#dbe3eb;--red:#b42318;--green:#16845b}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);font-family:Tahoma,Arial,sans-serif;color:var(--text);line-height:1.6}
+header{background:linear-gradient(135deg,#17324d,#2878a5);color:#fff;padding:22px 16px 28px}
+.wrap{max-width:1050px;margin:auto;padding:0 14px}h1{margin:0 0 5px;font-size:25px}header p{margin:0;opacity:.9;font-size:14px}
+main{margin-top:-14px;padding-bottom:40px}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px}.stat,.panel,.vehicle-card,.record{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;box-shadow:0 3px 12px #16324d08}
+.stat small{display:block;color:var(--muted)}.stat strong{font-size:21px}.tabs{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}.tab,button{border:0;border-radius:9px;padding:10px 14px;font:inherit;cursor:pointer}.tab{background:#e2eaf1;color:var(--navy)}.tab.active,button.primary{background:var(--navy);color:white}button.secondary{background:#e8eef4;color:var(--navy)}button.danger{background:#fff0ee;color:var(--red)}.layout{display:grid;grid-template-columns:1fr 1fr;gap:14px}.panel h2{font-size:18px;margin:0 0 12px}.field{margin-bottom:11px}.field label{display:block;font-size:13px;font-weight:bold;margin-bottom:4px}.field input,.field select,.field textarea{width:100%;border:1px solid #cbd5df;border-radius:8px;padding:10px;font:inherit;background:#fff}.field textarea{min-height:68px;resize:vertical}.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}.actions{display:flex;gap:8px;flex-wrap:wrap}.records{display:grid;gap:10px}.record-top{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}.record h3{margin:0;font-size:16px}.muted{color:var(--muted);font-size:13px}.pill{display:inline-block;border-radius:20px;padding:2px 9px;font-size:12px;background:#e9f5ef;color:var(--green)}.pill.due{background:#fff2d8;color:#8a5a00}.pill.late{background:#ffebe9;color:var(--red)}.empty{text-align:center;color:var(--muted);padding:25px}.hidden{display:none!important}.section-title{display:flex;justify-content:space-between;align-items:center;gap:10px;margin:18px 0 10px}.vehicle-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px}.vehicle-card h3{margin:0 0 4px}.vehicle-card p{margin:3px 0;color:var(--muted);font-size:13px}.notice{background:#fff8df;border:1px solid #f0df9e;border-radius:10px;padding:10px;font-size:13px;color:#624c0b;margin-bottom:12px}
+@media(max-width:700px){.layout{grid-template-columns:1fr}.stats{grid-template-columns:repeat(3,1fr)}.stat{padding:10px}.stat strong{font-size:17px}.row{grid-template-columns:1fr 1fr}h1{font-size:22px}}
+</style>
+</head>
+<body>
+<header><div class="wrap"><h1>🚗 دفتر صيانة السيارات</h1><p>نظّم السيارات، سجّل الصيانة والمصاريف، وتابع موعد الصيانة المقبلة.</p></div></header>
+<main class="wrap">
+<div class="stats">
+ <div class="stat"><small>السيارات</small><strong id="statCars">0</strong></div>
+ <div class="stat"><small>عمليات الصيانة</small><strong id="statRecords">0</strong></div>
+ <div class="stat"><small>مجموع المصاريف</small><strong id="statCost">0 د.م</strong></div>
+</div>
+<div class="notice">البيانات كتتحفظ فهاد الجهاز والمتصفح فقط. استعمل «تصدير نسخة احتياطية» باش تحتافظ بنسخة من معلوماتك.</div>
+<div class="tabs">
+<button class="tab active" data-tab="cars">السيارات</button><button class="tab" data-tab="maintenance">سجل الصيانة</button><button class="tab" data-tab="backup">النسخ الاحتياطي</button>
+</div>
+<section id="cars">
+<div class="layout">
+ <div class="panel"><h2>إضافة سيارة</h2>
+ <form id="carForm">
+  <div class="field"><label>اسم السيارة / الموديل *</label><input name="name" required placeholder="مثال: Volkswagen Caddy"></div>
+  <div class="row"><div class="field"><label>سنة الصنع</label><input name="year" type="number" min="1950" max="2100" placeholder="2023"></div><div class="field"><label>رقم التسجيل (اختياري)</label><input name="plate" placeholder="مثال: 12345-A-6"></div></div>
+  <div class="row"><div class="field"><label>نوع الوقود</label><select name="fuel"><option>ديزل</option><option>بنزين</option><option>هجين</option><option>كهرباء</option><option>آخر</option></select></div><div class="field"><label>الكيلومترات الحالية</label><input name="km" type="number" min="0" placeholder="30000"></div></div>
+  <div class="field"><label>ملاحظات</label><textarea name="notes" placeholder="معلومات إضافية..."></textarea></div>
+  <button class="primary" type="submit">حفظ السيارة</button>
+ </form></div>
+ <div class="panel"><h2>السيارات المسجلة</h2><div id="carList" class="vehicle-grid"><div class="empty">مازال ما زدتي حتى سيارة.</div></div></div>
+</div>
+</section>
+<section id="maintenance" class="hidden">
+<div class="layout">
+ <div class="panel"><h2>تسجيل عملية صيانة</h2>
+ <form id="recordForm">
+ <div class="field"><label>السيارة *</label><select name="carId" id="recordCar" required><option value="">اختار السيارة</option></select></div>
+ <div class="row"><div class="field"><label>نوع الصيانة *</label><select name="type" required><option>تغيير الزيت</option><option>تغيير الفلاتر</option><option>الفرامل</option><option>العجلات</option><option>البطارية</option><option>التوزيع / Courroie</option><option>التشخيص الإلكتروني</option><option>إصلاح المحرك</option><option>إصلاح آخر</option></select></div><div class="field"><label>تاريخ الصيانة *</label><input name="date" type="date" required></div></div>
+ <div class="row"><div class="field"><label>الكيلومترات وقت الصيانة</label><input name="km" type="number" min="0" placeholder="مثال: 35000"></div><div class="field"><label>التكلفة (درهم)</label><input name="cost" type="number" min="0" step="0.01" placeholder="0"></div></div>
+ <div class="row"><div class="field"><label>موعد الصيانة المقبلة</label><input name="nextDate" type="date"></div><div class="field"><label>الكيلومترات المقبلة</label><input name="nextKm" type="number" min="0" placeholder="مثال: 45000"></div></div>
+ <div class="field"><label>تفاصيل / قطع الغيار / اسم الميكانيكي</label><textarea name="notes" placeholder="شنو تبدل؟ شنو تصلح؟"></textarea></div>
+ <button class="primary" type="submit">حفظ الصيانة</button>
+ </form></div>
+ <div class="panel"><h2>سجل الصيانة</h2><div class="field"><label>بحث حسب السيارة أو نوع الصيانة</label><input id="searchRecords" placeholder="كتب كلمة للبحث..."></div><div id="recordList" class="records"><div class="empty">مازال ما سجلتي حتى عملية.</div></div></div>
+</div>
+</section>
+<section id="backup" class="hidden">
+<div class="panel"><h2>النسخ الاحتياطي</h2><p>صدّر بياناتك لملف JSON باش تقدر ترجعها من بعد أو تنقلها لجهاز آخر.</p><div class="actions"><button class="primary" id="exportBtn">تصدير نسخة احتياطية</button><label class="tab" for="importFile">استيراد نسخة احتياطية</label><input class="hidden" id="importFile" type="file" accept=".json,application/json"></div><p class="muted">تنبيه: الاستيراد غادي يعوّض البيانات الحالية بالبيانات الموجودة فالملف.</p></div>
+</section>
+</main>
+<script>
+const KEY='daftarSiyana_v1';
+let db={cars:[],records:[]};
+try{const saved=localStorage.getItem(KEY);if(saved)db=JSON.parse(saved)}catch(e){}
+const $=s=>document.querySelector(s);
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const money=n=>(Number(n)||0).toLocaleString('fr-MA',{maximumFractionDigits:2})+' د.م';
+function save(){localStorage.setItem(KEY,JSON.stringify(db));render()}
+function dateText(d){if(!d)return '—';return new Date(d+'T00:00:00').toLocaleDateString('fr-FR')}
+function render(){
+ $('#statCars').textContent=db.cars.length;
+ $('#statRecords').textContent=db.records.length;
+ $('#statCost').textContent=money(db.records.reduce((s,r)=>s+(Number(r.cost)||0),0));
+ $('#carList').innerHTML=db.cars.length?db.cars.map(c=>`<div class="vehicle-card"><h3>${esc(c.name)}</h3><p>${esc(c.year||'السنة غير محددة')} · ${esc(c.fuel||'')}</p><p>التسجيل: ${esc(c.plate||'—')}</p><p>الكيلومترات: ${esc(c.km||'—')} km</p>${c.notes?`<p>${esc(c.notes)}</p>`:''}<div class="actions" style="margin-top:10px"><button class="secondary" onclick="quickRecord('${c.id}')">إضافة صيانة</button><button class="danger" onclick="deleteCar('${c.id}')">حذف</button></div></div>`).join(''):'<div class="empty">مازال ما زدتي حتى سيارة.</div>';
+ const select=$('#recordCar');const old=select.value;
+ select.innerHTML='<option value="">اختار السيارة</option>'+db.cars.map(c=>`<option value="${c.id}">${esc(c.name)}${c.plate?' — '+esc(c.plate):''}</option>`).join('');
+ if(db.cars.some(c=>c.id===old))select.value=old;
+ const q=($('#searchRecords')?.value||'').toLowerCase();
+ const filtered=[...db.records].filter(r=>{const c=db.cars.find(c=>c.id===r.carId);return ((r.type+' '+(c?.name||'')+' '+(r.notes||'')).toLowerCase().includes(q))}).sort((a,b)=>(b.date||'').localeCompare(a.date||''));
+ $('#recordList').innerHTML=filtered.length?filtered.map(r=>{const c=db.cars.find(c=>c.id===r.carId);let due='';if(r.nextDate){const days=(new Date(r.nextDate+'T00:00:00')-new Date(new Date().toDateString()))/86400000;due=days<0?'<span class="pill late">تجاوز الموعد</span>':days<31?'<span class="pill due">الصيانة قريبة</span>':''}return `<article class="record"><div class="record-top"><div><h3>${esc(r.type)}</h3><div class="muted">${esc(c?.name||'سيارة محذوفة')} · ${dateText(r.date)}</div></div>${due}</div><p>الكيلومترات: ${esc(r.km||'—')} km · التكلفة: <b>${money(r.cost)}</b></p>${r.nextDate?`<p class="muted">الموعد المقبل: ${dateText(r.nextDate)} ${r.nextKm?'· عند '+esc(r.nextKm)+' km':''}</p>`:''}${r.notes?`<p>${esc(r.notes)}</p>`:''}<button class="danger" onclick="deleteRecord('${r.id}')">حذف العملية</button></article>`}).join(''):'<div class="empty">ما كايناش نتائج.</div>';
+}
+function quickRecord(id){document.querySelector('[data-tab="maintenance"]').click();$('#recordCar').value=id;$('#recordForm').elements.date.value=new Date().toISOString().slice(0,10);window.scrollTo({top:0,behavior:'smooth'})}
+function deleteCar(id){if(!confirm('واش متأكد بغيتي تحذف السيارة؟ عمليات الصيانة ديالها غادي تبقى فالسجل.'))return;db.cars=db.cars.filter(c=>c.id!==id);save()}
+function deleteRecord(id){if(!confirm('واش متأكد بغيتي تحذف عملية الصيانة؟'))return;db.records=db.records.filter(r=>r.id!==id);save()}
+document.querySelectorAll('.tab[data-tab]').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('.tab[data-tab]').forEach(x=>x.classList.toggle('active',x===b));['cars','maintenance','backup'].forEach(id=>$('#'+id).classList.toggle('hidden',id!==b.dataset.tab))}));
+$('#carForm').addEventListener('submit',e=>{e.preventDefault();const f=new FormData(e.target);db.cars.push({id:crypto.randomUUID(),name:f.get('name').trim(),year:f.get('year'),plate:f.get('plate').trim(),fuel:f.get('fuel'),km:f.get('km'),notes:f.get('notes').trim()});e.target.reset();save();alert('تسجلات السيارة بنجاح')});
+$('#recordForm').addEventListener('submit',e=>{e.preventDefault();const f=new FormData(e.target);db.records.push({id:crypto.randomUUID(),carId:f.get('carId'),type:f.get('type'),date:f.get('date'),km:f.get('km'),cost:f.get('cost'),nextDate:f.get('nextDate'),nextKm:f.get('nextKm'),notes:f.get('notes').trim()});e.target.reset();save();alert('تسجلات عملية الصيانة بنجاح')});
+$('#searchRecords').addEventListener('input',render);
+$('#exportBtn').addEventListener('click',()=>{const blob=new Blob([JSON.stringify(db,null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='daftar-siyana-backup.json';a.click();URL.revokeObjectURL(a.href)});
+$('#importFile').addEventListener('change',async e=>{const file=e.target.files[0];if(!file)return;try{const d=JSON.parse(await file.text());if(!Array.isArray(d.cars)||!Array.isArray(d.records))throw Error();if(confirm('واش متأكد بغيتي تعوّض البيانات الحالية؟')){db=d;save();alert('ترجعات البيانات بنجاح')}}catch(err){alert('الملف غير صالح')}e.target.value=''});
+render();
+</script>
+</body></html>
